@@ -2,7 +2,7 @@ version: 2
 sources:
   - name: saas
     database: ashley_demo_db 
-    schema: dbt_ashleydemocoder
+    schema: dbt_saas_growth
     tables:
       - name: raw_events
       - name: raw_subscriptions
