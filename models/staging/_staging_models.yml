@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: stg_users
+    description: "Base user table containing registration time and country information."
+    columns:
+      - name: user_id
+        description: "Primary Key"
+        tests:
+          - unique
+          - not_null
+      - name: country
+        tests:
+          - accepted_values:
+              values: ['US', 'UK', 'CN']
+
+  - name: stg_subscriptions
+    description: "Subscription status history derived from cleaned snapshots."
+    columns:
+      - name: subscription_id
+        tests:
+          - not_null
+      - name: status
+        tests:
+          - accepted_values:
+              values: ['active', 'cancelled', 'trial', 'expired'] 
+
+  - name: stg_events
+    description: "user behavioral logs"
+    columns:
+      - name: event_id
+        tests:
+          - unique
+          - not_null

@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: fct_user_growth
+    description: "Daily user growth report tracking new registrations."
+    columns:
+      - name: date_day
+        tests:
+          - not_null
+      - name: new_users_count
+        description: "Count of new users who registered on this date."
+
+  - name: fct_cohort_retention
+    description: >
+      Monthly cohort retention analysis. 
+      Tracks the retention rate for different signup cohorts over subsequent months (Month 0, 1, 2, etc.).
+    columns:
+      - name: cohort_month
+        description: "(Cohort)The month when the user group first registered (The Cohort)"
+      - name: retention_rate_percent
+        description: "The percentage of users retained from the initial cohort"
