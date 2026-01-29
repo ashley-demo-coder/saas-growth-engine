@@ -23,7 +23,7 @@ models:
       - name: status
         tests:
           - accepted_values:
-              values: ['active', 'cancelled', 'trial', 'expired']
+              values: ['active', 'cancelled', 'trial', 'expired'] 
 
   - name: stg_events
     description: "user behavioral logs"
