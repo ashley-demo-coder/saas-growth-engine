@@ -1,0 +1,34 @@
+version: 2
+
+models:
+  - name: stg_users
+    description: "基础用户表，包含注册时间和国家信息"
+    columns:
+      - name: user_id
+        description: "Primary Key"
+        tests:
+          - unique
+          - not_null
+      - name: country
+        tests:
+          - accepted_values:
+              values: ['US', 'UK', 'CN']
+
+  - name: stg_subscriptions
+    description: "基于 Snapshot 清洗后的订阅状态历史记录"
+    columns:
+      - name: subscription_id
+        tests:
+          - not_null
+      - name: status
+        tests:
+          - accepted_values:
+              values: ['active', 'cancelled', 'trial', 'expired']
+
+  - name: stg_events
+    description: "user behavioral logs"
+    columns:
+      - name: event_id
+        tests:
+          - unique
+          - not_null

@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: fct_user_growth
+    description: "每日新增用户报表Daily user growth report tracking new registrations."
+    columns:
+      - name: date_day
+        tests:
+          - not_null
+      - name: new_users_count
+        description: "当日注册的新用户数Count of new users who registered on this date."
+
+  - name: fct_cohort_retention
+    description: >
+      同类群组留存分析表 (Cohort Analysis)。
+      展示不同月份注册的用户在后续月份（Month 0, 1, 2...）的留存率。
+      Monthly cohort retention analysis. 
+      Tracks the retention rate for different signup cohorts over subsequent months (Month 0, 1, 2, etc.).
+    columns:
+      - name: cohort_month
+        description: "用户注册的月份 (Cohort)The month when the user group first registered (The Cohort)"
+      - name: retention_rate_percent
+        description: "留存率百分比The percentage of users retained from the initial cohort"

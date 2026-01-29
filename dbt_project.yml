@@ -1,0 +1,69 @@
+
+# Name your project! Project names should contain only lowercase characters
+# and underscores. A good package name should reflect your organization's
+# name or the intended use of these models
+name: 'saas_growth_engine'
+version: '1.0.0'
+config-version: 2
+
+# This setting configures which "profile" dbt uses for this project.
+# 这决定了你 compiled 后的 SQL 跑在哪个 schema 下
+profile: 'saas_growth_engine'
+
+# These configurations specify where dbt should look for different types of files.
+# The `model-paths` config, for example, states that models in this project can be
+# found in the "models/" directory. You probably won't need to change these!
+model-paths: ["models"]
+analysis-paths: ["analyses"]
+test-paths: ["tests"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+snapshot-paths: ["snapshots"]
+
+target-path: "target"  # directory which will store compiled SQL files
+clean-targets:         # directories to be removed by `dbt clean`
+  - "target"
+  - "dbt_packages"
+
+
+# Configuring models
+# Full documentation: https://docs.getdbt.com/docs/configuring-models
+
+# In dbt, the default materialization for a model is a view. This means, when you run 
+# dbt run or dbt build, all of your models will be built as a view in your data platform. 
+# The configuration below will override this setting for models in the example folder to 
+# instead be materialized as tables. Any models you add to the root of the models folder will 
+# continue to be built as views. These settings can be overridden in the individual model files
+# using the `{{ config(...) }}` macro.
+
+
+
+# =========================================================
+# 💡 你的疑问在这里解答：全局物化策略配置 (Materialization)
+# =========================================================
+models:
+  saas_growth_engine:
+    # 1. Staging 层：默认全部是 View
+    # 理由：Staging 只是重命名和类型转换，不涉及重计算，View 既省钱又实时。
+    staging:
+      +materialized: view
+      +schema: staging
+
+    # 2. Intermediate 层：默认是 Ephemeral (临时CTE) 或 Table
+    # 理由：Ephemeral 不会在数据库建表，保持数据库整洁。
+    # 但如果逻辑太复杂（如那个 int_subscription_daily_status），
+    # 我们会在 SQL 文件内部单独覆盖配置。
+    intermediate:
+      +materialized: ephemeral 
+      +schema: intermediate
+
+    # 3. Marts (业务层)：默认全部是 Table
+    # 理由：这是给 BI 用的，必须落地成物理表，保证查询速度极快。
+    marts:
+      +materialized: table
+      +schema: marts
+      growth:
+        +tags: ["daily_report"] # 可以给文件夹打标签
+      marketing:
+        +tags: ["user_segmentation"]
+
