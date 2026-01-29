@@ -24,7 +24,7 @@ select
     s.user_id,
     s.status,
     s.plan,
-    -- 简单的收入映射逻辑 Simple Revenue Mapping Logic
+    -- Simple Revenue Mapping Logic
     case 
         when s.status = 'active' and s.plan = 'pro' then 100
         when s.status = 'active' and s.plan = 'basic' then 50
@@ -37,7 +37,7 @@ inner join subscriptions s
     and ds.date_day < s.valid_to
 
 {% if is_incremental() %}
--- Lookback Window: 处理延迟到达的数据 processing Late-arriving data
--- 如果昨天的数据今天才通过 snapshot 更新，我们需要回溯重跑过去3天的数据 look back 3 days
+-- Lookback Window: processing Late-arriving data
+-- snapshot refresh, look back 3 days
 where ds.date_day >= dateadd(day, -3, (select max(date_day) from {{ this }}))
 {% endif %}

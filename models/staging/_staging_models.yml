@@ -2,7 +2,7 @@ version: 2
 
 models:
   - name: stg_users
-    description: "基础用户表，包含注册时间和国家信息"
+    description: "Base user table containing registration time and country information."
     columns:
       - name: user_id
         description: "Primary Key"
@@ -15,7 +15,7 @@ models:
               values: ['US', 'UK', 'CN']
 
   - name: stg_subscriptions
-    description: "基于 Snapshot 清洗后的订阅状态历史记录"
+    description: "Subscription status history derived from cleaned snapshots."
     columns:
       - name: subscription_id
         tests:

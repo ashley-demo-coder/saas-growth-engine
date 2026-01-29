@@ -7,7 +7,6 @@ version: '1.0.0'
 config-version: 2
 
 # This setting configures which "profile" dbt uses for this project.
-# 这决定了你 compiled 后的 SQL 跑在哪个 schema 下
 profile: 'saas_growth_engine'
 
 # These configurations specify where dbt should look for different types of files.
@@ -39,31 +38,28 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 
 # =========================================================
-# 💡 你的疑问在这里解答：全局物化策略配置 (Materialization)
+#  (Global Materialization Configuration)
 # =========================================================
 models:
   saas_growth_engine:
-    # 1. Staging 层：默认全部是 View
-    # 理由：Staging 只是重命名和类型转换，不涉及重计算，View 既省钱又实时。
+    # 1. Staging layer：default: View
+    # WHY：Staging  Simple renaming and type casting only; no heavy recomputation. Using a View is cost-effective and ensures real-time data.
     staging:
       +materialized: view
       +schema: staging
 
-    # 2. Intermediate 层：默认是 Ephemeral (临时CTE) 或 Table
-    # 理由：Ephemeral 不会在数据库建表，保持数据库整洁。
-    # 但如果逻辑太复杂（如那个 int_subscription_daily_status），
-    # 我们会在 SQL 文件内部单独覆盖配置。
+    # 2. Intermediate layer：default: Ephemeral (temp CTE) or Table
     intermediate:
       +materialized: ephemeral 
       +schema: intermediate
 
-    # 3. Marts (业务层)：默认全部是 Table
-    # 理由：这是给 BI 用的，必须落地成物理表，保证查询速度极快。
+    # 3. Marts (business layer)：default: Table
+    # WHY：For BI，Must be materialized as a table to ensure high query performance
     marts:
       +materialized: table
       +schema: marts
       growth:
-        +tags: ["daily_report"] # 可以给文件夹打标签
+        +tags: ["daily_report"] # add tag for folder
       marketing:
         +tags: ["user_segmentation"]
 

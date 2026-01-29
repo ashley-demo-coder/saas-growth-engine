@@ -3,7 +3,7 @@ with retention_base as (
 ),
 
 cohort_sizes as (
-    -- Initial User Count at every Cohort month 每个 Cohort 初始有多少人 (Month 0 size)
+    -- Initial User Count at every Cohort month (Month 0 size)
     select 
         cohort_month, 
         count(distinct user_id) as num_original_users
